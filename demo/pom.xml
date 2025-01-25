@@ -1,65 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.irvhacks</groupId>
-    <artifactId>demo</artifactId>
-    <version>1.0-SNAPSHOT</version>
+  <!-- Project Coordinates -->
+  <groupId>com.irvhacks</groupId>
+  <artifactId>demo</artifactId>
+  <version>1.0-SNAPSHOT</version>
 
-    <!-- Spring Boot Parent -->
-    <parent>
+  <!-- Inherit Spring Boot defaults -->
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.1.4</version> <!-- Update to the latest version if needed -->
+    <relativePath/>
+  </parent>
+
+  <properties>
+    <java.version>17</java.version>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+  </properties>
+
+  <dependencies>
+    <!-- 1. Spring Boot Starter for building web apps -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <!-- 2. Spring Boot Starter Test (optional, for testing) -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- 3. dotenv-java (for loading .env environment variables) -->
+    <dependency>
+      <groupId>io.github.cdimascio</groupId>
+      <artifactId>dotenv-java</artifactId>
+      <version>3.0.0</version>
+    </dependency>
+
+    <!-- 4. Official OpenAI Java client (Primary dependency) -->
+    <dependency>
+      <groupId>com.openai</groupId>
+      <artifactId>openai-java</artifactId>
+      <version>0.14.1</version>
+    </dependency>
+
+    <dependency>
         <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.4</version> <!-- Replace with the latest Spring Boot version -->
-        <relativePath/> <!-- Look up parent from the Maven repository -->
-    </parent>
+        <artifactId>spring-boot-devtools</artifactId>
+        <optional>true</optional>
+    </dependency>
 
-    <properties>
-        <java.version>17</java.version>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-    </properties>
 
-    <dependencies>
+    <dependency>
+      <groupId>com.openai</groupId>
+      <artifactId>openai-java-client-okhttp</artifactId>
+      <version>0.14.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <artifactId>kotlin-stdlib</artifactId>
+      <version>1.9.23</version>
+    </dependency>
+  </dependencies>
 
-        <!-- Spring Boot Starter Web -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <!-- Spring Boot Test Starter (optional, for testing) -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- dotenv-java -->
-        <dependency>
-            <groupId>io.github.cdimascio</groupId>
-            <artifactId>dotenv-java</artifactId>
-            <version>3.0.0</version>
-        </dependency>
-
-        <!-- OpenAI API -->
-        <dependency>
-            <groupId>com.theokanning.openai-gpt3-java</groupId>
-            <artifactId>client</artifactId>
-            <version>0.12.0</version> <!-- Replace with the latest version -->
-        </dependency>
-
-    </dependencies>
-
-    <build>
-        <plugins>
-            <!-- Spring Boot Maven Plugin -->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
+  <build>
+    <plugins>
+      <!-- Spring Boot Maven Plugin for packaging and running the app -->
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
 </project>
