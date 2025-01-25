@@ -23,6 +23,7 @@
     </properties>
 
     <dependencies>
+
         <!-- Spring Boot Starter Web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -42,6 +43,14 @@
             <artifactId>dotenv-java</artifactId>
             <version>3.0.0</version>
         </dependency>
+
+        <!-- OpenAI API -->
+        <dependency>
+            <groupId>com.theokanning.openai-gpt3-java</groupId>
+            <artifactId>client</artifactId>
+            <version>0.12.0</version> <!-- Replace with the latest version -->
+        </dependency>
+
     </dependencies>
 
     <build>
