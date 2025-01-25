@@ -1,5 +1,8 @@
 package com.irvhacks;
 
+import java.util.Map;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,8 +24,8 @@ public class QueryManager {
     public static final String DOCTOR_NAME = "If you are provided with a singular name, or asked for information on a name, just output the exact name back."; 
     
     
-    @PostMapping("/query")    
-    public void query(@RequestBody String query)
+    @PostMapping("/query")
+    public Map<String, String> query(@RequestBody String query)
     {
         if (query == null || query.isEmpty()) {
           Main.message = "NO!";
@@ -44,8 +47,14 @@ public class QueryManager {
         .temperature(0.7)
         .build();
 
-        ChatCompletion chatCompletion = client.chat().completions().create(params).validate();  
-        Main.message = chatCompletion.choices().get(0).message().content().get();                                                                 
+        ChatCompletion chatCompletion = Main.client.chat().completions().create(params).validate();  
+        String result = chatCompletion.choices().get(0).message().content().get();   
+        Main.message = result;
+
+        System.out.println(result);
+
+        return Map.of("result", result); 
+
     }
     
 
