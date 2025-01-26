@@ -1,0 +1,6 @@
+.vscode
+.env
+demo/.env
+demo/app/.env
+demo/app/datasets/general_data.csv
+demo/app/databases/general_dataset.db
