@@ -1,45 +1,32 @@
 import requests
+import os
 
-ZEMBRA_API_URL = "https://api.zembra.io/listing/find"
+# Zembra API Key
+ZEMBRA_API_KEY = os.getenv("ZEMBRA_API_KEY")
+ZEMBRA_URI = "https://api.zembra.io/listing/find?name="
 
-ZEMBRA_AUTH_TOKEN = "your_bearer_token"
+def query_zembra(names: list[str]) -> list[dict]:
+    """
+    Search a list of names using the Zembra API and return the results.
+    """
+    if not names:
+        return []
 
-
-def fetch_zembra_data(name: str, network: str):
-
-    params = {"name": name, "networks[]": network}
-
+    zembra_responses = []
     headers = {
-
-        "Authorization": f"Bearer {ZEMBRA_AUTH_TOKEN}",
-
+        "Authorization": f"Bearer {ZEMBRA_API_KEY}",
         "Accept": "application/json",
-
     }
 
-    response = requests.get(ZEMBRA_API_URL, params=params, headers=headers)
+    for name in names:
+        try:
+            url = f"{ZEMBRA_URI}{name}"
+            response = requests.get(url, headers=headers)
+            if response.status_code == 200:
+                zembra_responses.append({name: response.json()})
+            else:
+                zembra_responses.append({name: {"error": f"Failed to fetch data with status {response.status_code}"}})
+        except Exception as e:
+            zembra_responses.append({name: {"error": str(e)}})
 
-    if response.status_code != 200:
-
-        raise Exception(f"Zembra API error: {response.text}")
-
-    return process_data(response.json())
-
-
-def process_data(data):
-
-    processed = {}
-
-    for item in data.get("data", []):
-
-        doctor_name = item.get("name")
-
-        processed[doctor_name] = {
-
-            "specialty": item.get("specialty"),
-
-            "location": item.get("location"),
-
-        }
-
-    return processed
+    return zembra_responses
