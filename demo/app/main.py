@@ -1,14 +1,16 @@
 from fastapi import FastAPI
-import os
-from dotenv import load_dotenv
 from app.api.endpoints import router as api_router
+from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
+app = FastAPI(debug=True)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins. Replace with specific origins if needed.
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all HTTP methods
+    allow_headers=["*"],  # Allows all headers
+)
 
 # Include the API router
-
 app.include_router(api_router)
-load_dotenv()
-
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-ZEMBRA_API_KEY = os.getenv("ZEMBRA_API_KEY")

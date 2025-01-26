@@ -1,15 +1,15 @@
-import openai
+from openai import OpenAI
 import os
+from config.settings import settings
 
-# OpenAI API Key
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-openai.api_key = OPENAI_API_KEY
+
+client = OpenAI(api_key=settings.openai_api_key)
 
 # Constants for OpenAI system prompts
 SEARCH_INFO = (
     "You are to embody the role of a MEDICAL search engine. "
     "You will only provide names in response to the query that is asked, with no other additional information. "
-    "You will provide a list of up to 15 names. JUST names. Separate each one with the character |. Make sure it's a full name, and no weird artifacts are included."
+    "You will provide a list of up to 3 names. JUST names. Separate each one with the character |. Make sure it's a full name, and no weird artifacts are included. Include all medical prefixes, like Dr, or MD."
 )
 
 DOCTOR_NAME = (
@@ -17,10 +17,11 @@ DOCTOR_NAME = (
 )
 
 def get_names_from_openai(query: str) -> list[str]:
+    print("we are good")
     """
     Use OpenAI to get a list of names based on the query.
     """
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         model="gpt-4",
         messages=[
             {"role": "system", "content": SEARCH_INFO},
@@ -30,5 +31,11 @@ def get_names_from_openai(query: str) -> list[str]:
         temperature=0.4,
     )
 
-    names_result = response["choices"][0]["message"]["content"]
-    return [name.strip() for name in names_result.split("|") if name.strip()]
+    print("we are not good")
+
+    names_result = response.choices[0].message
+
+    if(names_result.content.__contains__("|")):
+        return [name.strip() for name in names_result.content.split("|") if name.strip()]
+    else:
+        return []
