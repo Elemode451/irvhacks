@@ -1,30 +1,35 @@
-import requests
-
-BASE_URL = "https://openpaymentsdata.cms.gov/resource/fb3a65aa-c901-4a38-a813-b04b00dfa2a9.json"
+import pandas as pd
+from app.datasets.paths import GENERAL_DATASET
 
 def query_general_dataset(first_name, last_name):
     """
-    Query the General Dataset to retrieve payment details for a specific physician.
+    Query an Excel spreadsheet to find details about a specific physician.
+
+    Args:
+        file_path (str): Path to the Excel file.
+        first_name (str): The physician's first name.
+        last_name (str): The physician's last name.
+
+    Returns:
+        pd.DataFrame: Filtered rows matching the query.
     """
-
-    params = {
-        "physician_first_name": first_name,
-        "physician_last_name": last_name
-    }
-
     try:
-        response = requests.get(BASE_URL, params=params)
-        
-        if response.status_code == 200:
-            data = response.json()
-            print(f"Results for {first_name} {last_name}:")
-            return data
-        else:
-            print(f"Error: {response.status_code} - {response.text}")
-            return None
+        # Load the Excel spreadsheet
+        data = pd.read_excel(GENERAL_DATASET)
+
+        # Query the DataFrame
+        filtered_data = data[
+            (data['covered_recipient_first_name'] == first_name) &
+            (data['covered_recipient_last_name'] == last_name)
+        ]
+
+        return filtered_data
+
+    except FileNotFoundError:
+        print(f"Error: File not found at {GENERAL_DATASET}")
+        return None
     except Exception as e:
-        print(f"Exception occurred: {str(e)}")
+        print(f"An error occurred: {e}")
         return None
 
-physician_data = query_general_dataset("John", "Doe")
-print(physician_data)
+

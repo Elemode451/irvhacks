@@ -51,11 +51,19 @@ async def query(request: QueryRequest):
             for doctor_name in doctor_entry:
                 names.append(doctor_name)
 
-        new_names = list(map(lambda name: split_name(clean_name(name)), names))
-        print(new_names)
+        clean_names = list(map(lambda name: split_name(clean_name(name)), names))
+        print(clean_names)
 
         # Step 3: Open CMS query
-        print(query_general_dataset(names))
+        cms_results = []
+        for name_pair in clean_names:
+            (first_name, last_name) = name_pair
+            print(name_pair)
+            cms_results.append(query_general_dataset(first_name, last_name))
+            
+        print(cms_results)
+
+        # print(query_general_dataset("Silas", "Dudley"))
     
 
 
