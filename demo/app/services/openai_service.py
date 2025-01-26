@@ -9,11 +9,14 @@ client = OpenAI(api_key=settings.openai_api_key)
 SEARCH_INFO = (
     "You are to embody the role of a MEDICAL search engine. "
     "You will only provide names in response to the query that is asked, with no other additional information. "
-    "You will provide a list of up to 3 names. JUST names. Separate each one with the character |. Make sure it's a full name, and no weird artifacts are included. Include all medical prefixes, like Dr, or MD."
 )
 
 DOCTOR_NAME = (
     "If you are provided with a singular name, or asked for information on a DOCTOR'S name, just output the exact name back."
+)
+
+NUM_NAMES = (
+    "You will provide a list of up to 3 names. JUST names. Separate each one with the character |. Make sure it's a full name, and no weird artifacts are included. Include all medical prefixes, like Dr, or MD."
 )
 
 def get_names_from_openai(query: str) -> list[str]:
@@ -26,6 +29,7 @@ def get_names_from_openai(query: str) -> list[str]:
         messages=[
             {"role": "system", "content": SEARCH_INFO},
             {"role": "system", "content": DOCTOR_NAME},
+            {"role": "system", "content": NUM_NAMES},
             {"role": "user", "content": query},
         ],
         temperature=0.4,
